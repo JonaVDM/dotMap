@@ -1,5 +1,9 @@
-#map {
+/* #map {
     border: 5px solid black;
+} */
+
+body {
+    overflow: hidden;
 }
 
 * {

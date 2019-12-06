@@ -1,4 +1,4 @@
-const size = 900;
+let size = {};
 let offset = 3000;
 
 getLocation();
@@ -8,10 +8,16 @@ function getLocation() {
 }
 
 async function show(pos) {
+    // Get the width/height of the window
+    size.width = window.innerWidth;
+    size.height = window.innerHeight;
+    size.max = (size.width > size.height) ? size.width : size.height;
+
     // Load in the "map"
     let map = document.querySelector('#map');
-    map.width = size;
-    map.height = size;
+    map.width = size.width;
+    map.height = size.height;
+    console.log(map.width);
     let ctx = map.getContext('2d');
 
     // get the data
@@ -35,11 +41,11 @@ function parseData(data, box) {
         let lon = point.longitudeE7 / 10**7;
 
         let p = {
-            y: size - Math.round((lat - box.s) / (box.n - box.s) * size),
-            x: Math.round((lon - box.w) / (box.e - box.w) * size),
+            y: size.max - Math.round((lat - box.s) / (box.n - box.s) * size.max),
+            x: Math.round((lon - box.w) / (box.e - box.w) * size.max),
         };
 
-        if (p.x >= 0 && p.x <= size && p.y >= 0 && p.y <= size ) {
+        if (p.x >= 0 && p.x <= size.width && p.y >= 0 && p.y <= size.height ) {
             points.push(p);
         }
     }
@@ -71,4 +77,3 @@ function createBox(lat, lon) {
 }
 
 const round = (n, decimals = 0) => Number(`${Math.round(`${n}e${decimals}`)}e-${decimals}`);
-
